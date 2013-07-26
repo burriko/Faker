@@ -37,9 +37,35 @@ class ColumnTypeGuesser
             case 'text':
                 return function() use ($generator) { return $generator->text; };
             case 'datetime':
+                return function() use ($generator) {
+                    $date = $generator->dateTime;
+                    return array(
+                        'year' => $date->format('Y'),
+                        'month' => $date->format('m'),
+                        'day' => $date->format('d'),
+                        'hour' => $date->format('H'),
+                        'min' => $date->format('i'),
+                        'sec' => $date->format('s'),
+                    );
+                };
             case 'date':
-                case 'time':
-                return function() use ($generator) { return $generator->datetime; };
+                return function() use ($generator) {
+                    $date = $generator->dateTime;
+                    return array(
+                        'year' => $date->format('Y'),
+                        'month' => $date->format('m'),
+                        'day' => $date->format('d'),
+                    );
+                };
+            case 'time':
+                return function() use ($generator) {
+                    $date = $generator->dateTime;
+                    return array(
+                        'hour' => $date->format('H'),
+                        'min' => $date->format('i'),
+                        'sec' => $date->format('s'),
+                    );
+                };
             default:
                 // no smart way to guess what the user expects here
                 return null;
