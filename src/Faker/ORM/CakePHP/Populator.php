@@ -50,23 +50,14 @@ class Populator
      */
     public function execute($con = null)
     {
-        var_dump($this->entities);
-        // exit();
-        // if (null === $con) {
-        //     $con = $this->getConnection();
-        // }
-        // $isInstancePoolingEnabled = \Propel::isInstancePoolingEnabled();
-        // \Propel::disableInstancePooling();
+        // var_dump($this->entities);
+
         $insertedEntities = array();
-        // $con->beginTransaction();
+
         foreach ($this->quantities as $class => $number) {
             for ($i=0; $i < $number; $i++) {
                 $insertedEntities[$class][]= $this->entities[$class]->execute($class, $insertedEntities);
             }
-        }
-        $con->commit();
-        if ($isInstancePoolingEnabled) {
-            \Propel::enableInstancePooling();
         }
 
         return $insertedEntities;
