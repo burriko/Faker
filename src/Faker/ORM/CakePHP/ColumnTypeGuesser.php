@@ -13,7 +13,6 @@ class ColumnTypeGuesser
 
     public function guessFormat($field)
     {
-        var_dump($field);
         $generator = $this->generator;
         switch ($field['type']) {
             case 'boolean':
