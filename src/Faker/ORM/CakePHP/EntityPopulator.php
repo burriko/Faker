@@ -64,6 +64,9 @@ class EntityPopulator
             // if ($columnMap->isPrimaryKey()) {
             //     continue;
             // }
+            if ($fieldName == $cake_model->primaryKey)
+                continue;
+
             if ($formatter = $nameGuesser->guessFormat($fieldName)) {
                 $formatters[$fieldName] = $formatter;
                 continue;
