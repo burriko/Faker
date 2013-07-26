@@ -3,8 +3,8 @@
 namespace Faker\ORM\CakePHP;
 
 /**
- * Service class for populating a database using the Propel ORM.
- * A Populator can populate several tables using ActiveRecord classes.
+ * Service class for populating a database using the CakePHP ORM.
+ * A Populator can populate several tables using CakePHP Model classes.
  */
 class Populator
 {
@@ -20,12 +20,12 @@ class Populator
     /**
      * Add an order for the generation of $number records for $entity.
      *
-     * @param mixed $entity A Propel ActiveRecord classname, or a \Faker\ORM\Propel\EntityPopulator instance
+     * @param mixed $entity A CakePHP Model classname, or a \Faker\ORM\CakePHP\EntityPopulator instance
      * @param int   $number The number of entities to populate
      */
     public function addEntity($entity, $number, $customColumnFormatters = array(), $customModifiers = array())
     {
-        if (!$entity instanceof \Faker\ORM\CakePHP\EntityPopulator) {
+        if ( ! $entity instanceof \Faker\ORM\CakePHP\EntityPopulator) {
             $entity = new \Faker\ORM\CakePHP\EntityPopulator($entity);
         }
         $entity->setColumnFormatters($entity->guessColumnFormatters($this->generator));
@@ -44,11 +44,9 @@ class Populator
     /**
      * Populate the database using all the Entity classes previously added.
      *
-     * @param PropelPDO $con A Propel connection object
-     *
      * @return array A list of the inserted PKs
      */
-    public function execute($con = null)
+    public function execute()
     {
         // var_dump($this->entities);
 

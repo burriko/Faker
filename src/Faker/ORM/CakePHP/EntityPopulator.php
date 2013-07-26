@@ -5,7 +5,7 @@ namespace Faker\ORM\CakePHP;
 use \Faker\Provider\Base;
 
 /**
- * Service class for populating a table through a Propel ActiveRecord class.
+ * Service class for populating a table through a CakePHP Model class.
  */
 class EntityPopulator
 {
@@ -16,7 +16,7 @@ class EntityPopulator
     /**
      * Class constructor.
      *
-     * @param string $class A Propel ActiveRecord classname
+     * @param string $class A CakePHP Model classname
      */
     public function __construct($class)
     {
