@@ -158,7 +158,7 @@ class EntityPopulator
      */
     public function execute($class, $insertedEntities)
     {
-        $obj = new $this->class();
+        $obj = \ClassRegistry::init($this->class);
         $data = array();
         foreach ($this->getColumnFormatters() as $column => $format) {
             if (null !== $format) {
