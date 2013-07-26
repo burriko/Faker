@@ -169,6 +169,7 @@ class EntityPopulator
         foreach ($this->getModifiers() as $modifier) {
             $modifier($obj, $insertedEntities);
         }
+        $obj->create();
         $obj->save(array($class => $data));
 
         return $obj->getLastInsertId();
