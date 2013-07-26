@@ -52,18 +52,12 @@ class EntityPopulator
         $nameGuesser = new \Faker\Guesser\Name($generator);
         $columnTypeGuesser = new \Faker\ORM\CakePHP\ColumnTypeGuesser($generator);
         foreach ($cake_model->schema() as $fieldName => $fieldMeta) {
-            // skip behavior columns, handled by modifiers
-            // if ($this->isColumnBehavior($columnMap)) {
-            //     continue;
-            // }
-            // if ($columnMap->isForeignKey()) {
-            //     $relatedClass = $columnMap->getRelation()->getForeignTable()->getClassname();
-            //     $formatters[$columnMap->getPhpName()] = function($inserted) use ($relatedClass) { return isset($inserted[$relatedClass]) ? $inserted[$relatedClass][mt_rand(0, count($inserted[$relatedClass]) - 1)] : null; };
-            //     continue;
-            // }
-            // if ($columnMap->isPrimaryKey()) {
-            //     continue;
-            // }
+            if ($cake_model->isForeignKey($fieldName)) {
+                $relatedClass = $this->findRelatedClass($cake_model->belongsTo, $fieldName);
+                $formatters[$fieldName] = function($inserted) use ($relatedClass) { return isset($inserted[$relatedClass]) ? $inserted[$relatedClass][mt_rand(0, count($inserted[$relatedClass]) - 1)] : null; };
+                continue;
+            }
+
             if ($fieldName == $cake_model->primaryKey)
                 continue;
 
@@ -78,6 +72,16 @@ class EntityPopulator
         }
 
         return $formatters;
+    }
+
+    protected function findRelatedClass(&$belongsTo, $fieldName)
+    {
+        foreach ($belongsTo as $association) {
+            if ($fieldName == $association['foreignKey']) {
+                return $association['className'];
+            }
+        }
+        // throw exception if no association found?
     }
 
     protected function isColumnBehavior($columnMap)
@@ -161,7 +165,7 @@ class EntityPopulator
                 $data[$column] = is_callable($format) ? $format($insertedEntities, $obj) : $format;
             }
         }
-        var_dump($data);
+        // var_dump($data);
         foreach ($this->getModifiers() as $modifier) {
             $modifier($obj, $insertedEntities);
         }
