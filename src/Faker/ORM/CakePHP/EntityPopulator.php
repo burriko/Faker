@@ -68,7 +68,7 @@ class EntityPopulator
                 $formatters[$fieldName] = $formatter;
                 continue;
             }
-            if ($formatter = $columnTypeGuesser->guessFormat($fieldName, $this->class)) {
+            if ($formatter = $columnTypeGuesser->guessFormat($fieldMeta)) {
                 $formatters[$fieldName] = $formatter;
                 continue;
             }
@@ -151,13 +151,9 @@ class EntityPopulator
      */
     public function execute($class, $insertedEntities)
     {
-        echo $class;
-        echo $this->class;
         $obj = new $this->class();
         $data = array();
         foreach ($this->getColumnFormatters() as $column => $format) {
-            echo $column;
-            var_dump($format);
             if (null !== $format) {
                 $data[$column] = is_callable($format) ? $format($insertedEntities, $obj) : $format;
             }
@@ -166,7 +162,7 @@ class EntityPopulator
         foreach ($this->getModifiers() as $modifier) {
             $modifier($obj, $insertedEntities);
         }
-        var_dump($obj->save(array($class => $data)));
+        $obj->save(array($class => $data));
 
         return $obj->getLastInsertId();
     }

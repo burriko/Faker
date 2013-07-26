@@ -11,11 +11,11 @@ class ColumnTypeGuesser
         $this->generator = $generator;
     }
 
-    public function guessFormat($fieldName, $fieldMeta)
+    public function guessFormat($field)
     {
+        var_dump($field);
         $generator = $this->generator;
-        $type = $fieldMeta['type'];
-        switch ($type) {
+        switch ($field['type']) {
             case 'boolean':
                 return function() use ($generator) { return $generator->boolean; };
             case 'decimal':
@@ -31,7 +31,7 @@ class ColumnTypeGuesser
             case 'float':
                 return function() { return mt_rand(0,intval('4294967295'))/mt_rand(1,intval('4294967295')); };
             case 'string':
-                $size = isset($class->fieldMappings[$fieldName]['length']) ? $class->fieldMappings[$fieldName]['length'] : 255;
+                $size = isset($field['length']) ? $field['length'] : 255;
 
                 return function() use ($generator, $size) { return $generator->text($size); };
             case 'text':
