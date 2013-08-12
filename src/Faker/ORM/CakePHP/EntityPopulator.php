@@ -159,18 +159,18 @@ class EntityPopulator
     public function execute($class, $insertedEntities)
     {
         $obj = \ClassRegistry::init($this->class);
-        $data = array();
+        $obj->create();
+
         foreach ($this->getColumnFormatters() as $column => $format) {
             if (null !== $format) {
-                $data[$column] = is_callable($format) ? $format($insertedEntities, $obj) : $format;
+                $obj->data[$this->class][$column] = is_callable($format) ? $format($insertedEntities, $obj) : $format;
             }
         }
-        // var_dump($data);
         foreach ($this->getModifiers() as $modifier) {
             $modifier($obj, $insertedEntities);
         }
-        $obj->create();
-        $obj->save(array($class => $data));
+
+        $obj->save($obj->data);
 
         return $obj->getLastInsertId();
     }
